@@ -1,0 +1,71 @@
+0
+ever owned
+i've owned
+ownership
+own
+ever
+1
+bought
+purchase
+purchased
+buy again
+buy it again
+purchase again
+purchase it again
+buy another
+purchase another
+2
+satisfied
+happy
+proud
+pleased
+my needs
+my need
+my expectations
+my expectation
+3
+warranty
+quiet
+responsive
+smooth
+research
+comfortable
+refer
+style
+expect
+only
+for me
+4
+JJJJ
+5
+JJJKK
+6
+don't
+do not
+can't 
+can not
+aren't
+hasn't
+hadn't
+couldn't
+shouldn't
+doesn't
+7
+VBZ PRP$
+VBD PRP$
+VBN IN PRP$
+PRP$ JJ
+JJS NN NN
+NN RB VBN
+PRP$ CD
+PRP VBD
+NN VBN
+8
+JJ
+JJR
+JJS
+9
+VBP VBN
+10
+IN PRP VBP
+PRP MD

@@ -1,0 +1,79 @@
+
+
+==== NAIVE BAYES MODEL ====
+
+
+==== Classification Summary ====
+
+Correctly Classified Instances        4379               74.5489 %
+Incorrectly Classified Instances      1495               25.4511 %
+Kappa statistic                          0.3977
+Mean absolute error                      0.1902
+Root mean squared error                  0.347 
+Relative absolute error                 61.6743 %
+Root relative squared error             88.3652 %
+Total Number of Instances             5874     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.891     0.475      0.801     0.891     0.844      0.847    1
+                 0.482     0.131      0.568     0.482     0.521      0.815    2
+                 0.196     0.007      0.606     0.196     0.296      0.802    3
+Weighted Avg.    0.745     0.359      0.729     0.745     0.729      0.836
+
+
+
+==== L2 regularized logistic regression model ====
+
+
+==== Classification Summary ====
+=== Confusion Matrix ===
+
+    a    b    c   <-- classified as
+ 3736  270    0 |    a = 1
+ 1020  527    0 |    b = 2
+  220  101    0 |    c = 3
+
+
+Correctly Classified Instances        4263               72.5741 %
+Incorrectly Classified Instances      1611               27.4259 %
+Kappa statistic                          0.2821
+Mean absolute error                      0.1828
+Root mean squared error                  0.4276
+Relative absolute error                 59.2787 %
+Root relative squared error            108.8977 %
+Total Number of Instances             5874     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.933     0.664      0.751     0.933     0.832      0.634    1
+                 0.341     0.086      0.587     0.341     0.431      0.627    2
+                 0         0          0         0         0          0.5      3
+Weighted Avg.    0.726     0.475      0.667     0.726     0.681      0.625
+
+
+
+==== LIBSVM MODEL ====
+
+
+==== Classification Summary ====
+
+Correctly Classified Instances        4294               73.1018 %
+Incorrectly Classified Instances      1580               26.8982 %
+Kappa statistic                          0.3157
+Mean absolute error                      0.1793
+Root mean squared error                  0.4235
+Relative absolute error                 58.1381 %
+Root relative squared error            107.8449 %
+Total Number of Instances             5874     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.92      0.608      0.764     0.92      0.835      0.656    1
+                 0.393     0.102      0.579     0.393     0.468      0.645    2
+                 0         0          0         0         0          0.5      3
+Weighted Avg.    0.731     0.442      0.674     0.731     0.693      0.645
+

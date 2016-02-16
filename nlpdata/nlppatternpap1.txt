@@ -1,0 +1,134 @@
+0
+ever owned
+i've owned
+ownership
+own
+ever
+1
+bought
+purchase
+purchased
+buy again
+buy it again
+purchase again
+purchase it again
+buy another
+purchase another
+2
+satisfied
+happy
+proud
+pleased
+my needs
+my need
+my expectations
+my expectation
+3
+warranty
+quiet
+responsive
+research
+comfortable
+for me
+4
+tried
+rent
+testing
+rental
+lease
+5
+don't
+do not
+can't 
+can not
+aren't
+hasn't
+hadn't
+couldn't
+shouldn't
+doesn't
+awful
+bad
+mad
+cheat
+dislike
+horrible
+terrible
+lie
+pain
+shock
+suck
+terrific
+victim
+low
+poor
+worse
+worst
+6
+VBZ PRP
+VBD PRP
+PRP VBD
+PRP VBN
+7
+JJ
+JJR
+JJS
+8
+PRP$ CD
+9
+MD PRP
+DT MD
+JJ MD
+WRB MD
+10
+VBZ PRP$
+VBD PRP$
+VBN IN PRP$
+PRP$ JJ
+JJS NN NN
+NN RB VBN
+11
+might
+i think
+you will
+will be
+guess
+seems
+if i
+if you
+probably
+possible
+looking for
+you want
+perhaps
+10
+has had
+have had
+i paid
+we paid
+i got
+we got
+11
+PRP$ VBD
+PRP$ VBN
+12
+VBZ PRP$
+VBD PRP$
+VBN IN PRP$
+PRP$ JJ
+JJS NN NN
+NN RB VBN
+VBZ PRP$
+VBD PRP$
+VBN IN PRP$
+PRP$ JJ
+JJS NN NN
+NN RB VBN
+9
+MD PRP
+DT MD
+JJ MD
+WRB MD
+
+VBP VBD
+NN VBD
