@@ -1,1 +1,0 @@
-this clears the navigation system and resets all the controls

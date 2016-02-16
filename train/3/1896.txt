@@ -1,1 +1,0 @@
-the system has to boot when the car starts and will spontaneously reboot occasionally while driving
