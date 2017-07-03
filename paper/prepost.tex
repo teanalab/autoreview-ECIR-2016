@@ -1,0 +1,301 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{url}
+
+\urldef{\mailsa}\path|{mehedi,kotov,aravind.mohan,shiyong}@wayne.edu|
+\urldef{\mailsb}\path|pstieg@ford.com|
+
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\begin{document}
+
+\mainmatter
+
+
+\title{Feedback or Research: Separating Pre-purchase from Post-purchase Consumer Reviews}
+\titlerunning{Separating pre-purchase from post-purchase consumer reviews}
+
+\author{}
+%\author{Mehedi Hasan\inst{1} \and Alexander Kotov\inst{1} \and Aravind Mohan\inst{1} \and Shiyong Lu\inst{1} \and  Paul M. Stieg\inst{2}}
+
+%\authorrunning{Hasan et al.}
+
+\institute{}
+%\institute{Department of Computer Science, Wayne State University, Detroit, MI 48202, USA\\
+%\mailsa\\
+%\and
+%Ford Motor Co., Dearborn, MI 48124, USA\\
+%\mailsb
+%}
+
+\maketitle
+
+\begin{abstract}
+Online consumer reviews contain a wealth of information about products and services that, if properly identified and extracted, could be of immense value to businesses. While
+classification of reviews according to sentiment polarity has been extensively studied in previous work, many more focused types of review analysis remain open problems.
+In this work, we introduce a novel problem of separating post-purchase from pre-purchase reviews, which can facilitate identification of immediate actionable insights
+based on the feedback from the customers, who actually purchased and own a product. We address this problem by leveraging state-of-the-art classifiers in conjunction with the
+features that are based on the dictionaries and part-of-speech (POS) tag patterns. Using the gold standard created from collected online reviews, we experimentally demonstrate
+that using the features derived from both dictionaries and POS patterns allows all classifiers to achieve higher accuracy for this task than using lexical features alone.
+\end{abstract}
+
+\keywords{Text Classification, Consumer Reviews, E-commerce}
+
+\section{Introduction}
+
+Consumer generated content posted on online review platforms contains a wealth of information, which besides positive and negative judgments about product features and services,
+often includes specific suggestions for their improvement and root causes for customer dissatisfaction. Such information, if accurately identified, could be of immense value to
+businesses. Although previous research on consumer review analysis has resulted in accurate and efficient methods for classifying reviews according to the overall sentiment
+polarity \cite{Pang2008Book}, segmenting reviews into aspects and estimating the sentiment score of each aspect \cite{Yu2011AspectRank}, as well as summarizing both aspects
+and sentiments \cite{Hu2004Mining} \cite{Titov2008TextAspect} \cite{Yang2015USTM}, more focused types of review analysis, such as detecting the intent or timing of reviews, are
+needed to assist companies in making business decisions. One such problem, which we introduce and focus on in the present work, is separating reviews (or review fragments) written
+by the users after purchasing and actually using a product or a service (which we will further refer to as ``post-purchase'' reviews) from reviews that are written by the customers
+who shared their wishes, expectations or results of research before purchasing and using a product (which we will refer to as ``pre-purchase'' reviews).
+
+Effective separation of these types of review fragments would allow the businesses to better understand what aspects of products and services the customers are focused on before
+and after the purchase and tailor their marketing strategies accordingly. It would also allow to measure the extent to which the customer expectations are met by the actual
+products and services. Furthermore, ``post-purchase'' reviews, particularly the negative ones, are high-priority reviews, since they provide customer feedback, which needs to be
+immediately acted upon by manufacturers. Such feedback typically contains reports of malfunctions, as well as poor performance of products that are already on the market. A
+particularly large number of pre-purchase reviews are created for expensive products that constitute major purchasing decision and require extensive research prior to purchase
+(e.g. cameras, cars, motorcycles, etc.). There are also many enthusiasts, who often discuss the products they have seen or read about, but do not actually own.
+
+In this work, we evaluate the accuracy of state-of-the-art classification methods in conjunction with the features based on lexical and part-of-speech (POS) patterns for the task
+of identifying pre-purchase and post-purchase consumer review fragments. Separating these types of review fragments is a challenging task, since it requires distinguishing subtle
+nuances of language use, identifying implicit clues and making inferences. For example, the past tense of the verb in the phrase ``I heard'' from the following review fragment
+``The new Ford Explorer is a great looking car. I heard it has great fuel economy for an SUV'' indicates that this positive review has been written by a user, who didn't actually
+purchase the car. Despite the overall positive sentiment of the fragment, it provides no reliable information to the manufacturer on how the car can be improved. Although the
+review fragment ``so far this is the best car i tested" refers to the past experience, it is a pre-purchase review. On the other hand, while the fragment ``If I could, I would have
+two" refers to the future, it is a post-purchase review. In some cases, the presence of certain keywords gives the clue about the timing of review fragment (e.g. ``excellent
+vehicle, great price and the dealership provides very good service").
+
+In summary, the key contributions of this work are two-fold:
+\begin{enumerate}
+ \item We introduce a novel challenging consumer review analysis problem and provide a publicly available gold standard to evaluate the approaches to solve this problem;
+ \item We experimentally demonstrate that using both dictionary and POS pattern-based features allows classifiers to achieve higher accuracy for this task than using
+lexical features alone.
+\end{enumerate}
+
+\section{Related work}
+
+Although consumer reviews have been a subject of many studies over the past decade, a common trend of recent research is to move from detecting sentiments and opinions in online
+reviews towards a broader task of extracting actionable insights from customer feedback. One recent line of work focused just on detecting wishes \cite{Ramanand2010Wishes}
+\cite{Goldberg2009Wishes} in reviews or surveys. In particular, Goldberg et al. \cite{Goldberg2009Wishes} studied how wishes are expressed in general and
+proposed a template-based method for detecting the wishes in product reviews and political discussion posts, while Ramanand et al. \cite{Ramanand2010Wishes} proposed a method based
+on POS patterns to identify suggestions in product reviews. Moghaddam \cite{Moghaddam2015Defects} proposed a distant supervision-based method to detect the reports of defects and
+suggestions for product improvements in online reviews. Therefore, separation of pre-purchase from post-purchase reviews is a novel task that complements these recent
+studies.
+
+Other non-trivial textual classification problems have been recently discussed in the literature. For example, Bergsma et al. \cite{Bergsma2012Articles} used a combination of
+lexical and syntactic features to detect whether the author of a scientific article is a native English speaker, male or female, or whether an article was published in a conference
+or a journal. de Vel et al. \cite{deVel2002Gender} used style markers, structural characteristics and gender-preferential language as features for the task of gender and language
+background detection.  
+
+\section{Experimental setup}
+\subsection{Gold standard, features and classifiers}
+
+To create the gold standard for experiments in this work,\footnote{dataset is available at \url{http://xxxx.xxx/xxx}}
+%\footnote{gold standard is available at \url{http://github.com/teanalab/prepost}}
+we collected the reviews of all major car makes and models released to the market in the past 3 years from  MSN Autos\footnote{\url{http://www.msn.com/en-us/autos}}. Then we
+segmented the reviews into individual sentences, removed punctuation except exclamation (!) and question (?) marks (since \cite{Barbosa2010Robust}
+suggest that retaining them can improve the results of some classification tasks), and annotated the review sentences using Amazon Mechanical Turk. In order to reduce the effect of
+annotator bias, we created 5 HITs per each label and used the majority voting scheme to determine the final label for each review sentence. In total, the gold standard consists of
+3983 review sentences. Table \ref{tab:data_dist} shows the distribution of these sentences over classes. We used unigram bag-of-words lexical feature representation for each
+review fragment as a baseline, to which we added five binary features based on the dictionaries and four binary features based on the POS tag patterns manually compiled as
+described in Section~\ref{sec:dict_pos}. We used Naive Bayes (NB), Support Vector Machine (SVM) with linear kernel implemented in Weka machine learning
+toolkit\footnote{\url{http://www.cs.waikato.ac.nz/ml/weka}}, as well as L2-regularized logistic regression (LR) implemented in
+LIBLINEAR\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/liblinear}}\cite{Fan2008Liblinear} as classification methods. All experimental results reported in this work were
+obtained using 10-fold cross validation and micro-averaged over the folds.
+
+\subsection{Dictionaries and POS patterns}
+\label{sec:dict_pos}
+
+Each of the dictionaries contain the terms, which represent a particular concept related to the product (cars, in our case), such as negative emotion, ownership,
+satisfaction etc. To create the dictionaries, based on discussions and logical reasoning we came up with a small set of seed terms, such as ``buy'', ``own'', ``happy'',
+``warranty'', that capture the key lexical clues related to the timing of review creation regardless of any particular type of product. Then, we used on-line
+thesaurus\footnote{\url{http://www.thesaurus.com}} to find the synonyms of those words and considered each group of words as a dictionary.
+
+\begin{table}[!h]
+\caption{\label{tab:dicts}\textbf{Dictionaries with associated words and phrases.}}
+\centering
+\begin{tabular} { |l|l| }
+ \hline\hline
+ {\bf Dictionary} & {\bf Words} \\
+ \hline
+  OWNERSHIP  & own, ownership, owned, mine, individual, personal, etc. \\
+  \hline
+  PURCHASE & buy, bought, acquisition, purchase, purchased, etc.  \\
+  \hline
+  SATISFACTION & happy, cheerful, contented, delighted, glad, etc. \\
+  \hline
+  USAGE & warranty, guarantee, guaranty, cheap, cheaper, etc.  \\
+  \hline\hline
+\end{tabular}
+\end{table}
+
+
+Using similar procedure, we also came up with a small set of POS tag-based patterns that capture the key syntactic clues related to the timing of review creation with respect to
+the purchase of a product. For example, the presence of combinations of possessive pronouns and cardinal numbers (pattern ``PRP\$ CD'', e.g. matching the phrases ``my first'',
+``his second'', etc.), personal pronouns and past tense (pattern ``PRP VBD'', e.g. matching ``I owned'') or modal (pattern ``PRP MD'', e.g. matching ``I can'', ``you will'', etc.)
+verbs, past participles (pattern ``VBN'', e.g. matching ``owned or driven''), as well as adjectives, including comparative and superlative (patterns ``JJ'', ``JJR'' and ``JJS'')
+indicates that a review is likely to be post-purchase. More examples of dictionary words and POS patterns are provided in Tables~\ref{tab:dicts} and \ref{tab:pos_pats}.
+
+\begin{table}
+\caption{\label{tab:pos_pats}\textbf{POS patterns with examples.}}
+\centering
+\begin{tabular} { |l|l|l| }
+ \hline\hline
+ {\bf Pattern type} & {\bf Patterns} & {\bf Example} \\
+  \hline
+  OWNERSHIP & {\bf PRP\$ CD}, PRP VBD, & this is {\bf my third} azera from \\
+            & VBZ PRP\$, VBD PRP\$, etc. & 2008 to 2010 until now a 2012 \\
+  \hline
+  QUALITY & JJ, JJR, {\bf JJS} & it is definitely the {\bf best} \\& &choice for my family \\
+  \hline
+  MODALITY & {\bf PRP MD}, IN PRP VBP & buy one {\bf you will} love \\
+  \hline
+  EXPERIENCE & VBD, {\bf VBN} & i have {\bf driven} this in the winter \\&& and the all wheel drive model \\
+  \hline\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+\parbox{0.40\linewidth}{
+\caption{\label{tab:data_dist}\textbf{Distribution of classes in experimental dataset.}}
+\centering
+\begin{tabular} {|l|l|l|}
+\hline\hline
+{\bf Class} & {\bf \#~samp.} & {\bf Fraction} \\
+\hline
+pre-purchase & 2122 & 53.28 \% \\
+\hline
+post-purchase & 1861 & 46.72 \% \\
+\hline
+Total & 3983 & 100 \% \\
+\hline\hline
+\end{tabular}
+}
+\hfill
+\parbox{0.55\linewidth}{
+\caption{\label{tab:prepost_perf}\textbf{Performance of different classifiers using only lexical features. The highest value of each performance metric among all classifiers is
+highlighted in boldface.}}
+\centering
+\begin{tabular} { |l|l|l|l|l| }
+\hline\hline
+{\bf Method} & {\bf Precision}  & {\bf Recall} & {\bf F1 } & {\bf Accuracy} \\
+\hline
+SVM & {\bf 0.734 }  & 0.724 & 0.717 & 0.724 \\
+\hline
+LR & 0.729 & {\bf 0.726 } & {\bf 0.722} & {\bf 0.726 }  \\
+\hline
+NB & 0.703 & 0.704 & 0.702 & 0.704  \\
+\hline\hline
+\end{tabular}
+}
+\end{table}
+
+\section{Results and discussion}
+\subsection{Classification of post-purchase vs. pre-purchase reviews using only lexical features}
+
+Performance of different classifiers for the task of separating post-purchase from pre-purchase reviews using only lexical features according to the standard performance metrics is
+shown in Table~\ref{tab:prepost_perf}. From the results in Table~\ref{tab:prepost_perf}, it follows that LR outperforms SVM in terms of all performance metrics except precision and
+that both of them outperform Naive Bayes by 2-2.2\% on average across all performance metrics.
+
+\subsection{Classification of post-purchase vs. pre-purchase reviews using combination of lexical, dictionary and POS pattern features}
+
+Results for the second set of experiments, aimed at determining the relative performance of SVM, NB and LR classifiers in conjunction with: 1) combination of lexical and POS
+pattern-based features 2) combination of lexical and dictionary-based features 3) combination of all three feature types (lexical, dictionary and POS pattern features) are provided
+in Table~\ref{tab:prepost_perf2}, from which several conclusions regarding the influence of non-lexical features on performance of different classifiers for this task can be made.
+
+\begin{table}
+\caption{\label{tab:prepost_perf2}\textbf{Performance of different classifiers using different combinations of dictionary and POS pattern based features in addition to the lexical
+ones. The improvement in percentage is relative to using only lexical features by the same classifier. The highest value and largest improvement of each performance metric given a
+particular feature combination are highlighted in boldface and italic, respectively.}}
+\centering
+\begin{tabular} { |l|l|l|l|l| }
+\hline\hline
+{\bf Method} & {\bf Precision}  & {\bf Recall} & {\bf F1 score } & {\bf Accuracy} \\
+\hline
+SVM + POS & {\bf 0.733} & 0.727 & 0.722 (+0.70\%) & 0.727 (+0.41\%) \\
+\hline
+LR + POS & {\bf 0.733} & {\bf 0.730} & {\bf 0.727} (+0.70\%) & {\bf 0.730} (+0.55\%) \\
+\hline
+NB + POS & 0.709 & 0.710 & 0.709 ({\it +1.0\%}) &  0.710 ({\it +0.85\%}) \\
+\hline \hline
+SVM + Dictionary & {\bf 0.750} & {\bf 0.741} & {\bf 0.735} ({\it +2.51\%}) & {\bf 0.741} ({\it +2.35\%}) \\
+\hline
+LR + Dictionary & 0.740 &  0.736 & 0.733 (+1.52\%) &  0.736 (+1.38\%) \\
+\hline
+NB + Dictionary & 0.713 &  0.714 &  0.713 (+1.57\%)  &  0.714 (+1.42\%)\\
+\hline\hline
+SVM + POS + Dictionary & {\bf 0.752} & {\bf 0.743} & {\bf 0.738} ({\it +2.93\%}) &  {\bf 0.743} ({\it +2.62\%}) \\
+\hline
+LR + POS + Dictionary  & 0.745 &  0.741 & 0.738 (+2.22\%) &  0.741 (+2.07\%) \\
+\hline
+NB + POS + Dictionary & 0.717 &  0.718 & 0.717 (+2.14\%) &  0.718  (+1.99\%)\\
+\hline\hline
+\end{tabular}
+\end{table}
+
+First, we observed that SVM achieved the highest performance among all classifiers in terms of precision (0.752), recall (0.743) and accuracy (0.743), when a combination of
+lexical, POS and dictionary-based features was used. Second, using POS pattern-based features in addition to lexical ones allowed LR to achieve the highest performance in terms of
+all metrics and resulted in the highest improvement for NB classifier, while using a combination of lexical, dictionary and POS pattern-based features is more effective for SVM
+than for both NB and LR. Overall, experimental results presented above indicate that dictionary and POS pattern features allow to improve the performance of all classifiers for the
+task of separating pre-purchase from post-purchase review fragments relative to using only lexical features.
+
+\section{Conclusion}
+
+In this paper, we introduced a novel problem of separating post-purchase from pre-purchase consumer review fragments, which constitutes an important step towards extracting
+actionable insights from consumer reviews and found out that combining lexical features with dictionary and POS pattern features improves the performance of all classification
+models we experimented with for this task.
+%As a future work, we propose to incorporate more information about user behavior, as additional features for this classification tasks.
+
+\begin{thebibliography}{4}
+{\scriptsize
+\bibitem{Barbosa2010Robust}
+L. Barbosa and J. Feng. Robust Sentiment detection on Twitter from biased and noisy data. In \textsl{Proceedings of the 23rd COLING}, pages 36--44, 2010.
+
+\bibitem{Bergsma2012Articles}
+S. Bergsma, M. Post and D. Yarowsky. Stylometric analysis of scientific articles. In \textsl{Proceedings of the 2012 NAACL-HLT}, pages 327--337, 2012.
+
+\bibitem{deVel2002Gender}
+O.Y. de Vel, M.W. Corney, A.M. Anderson and G.M. Mohay. Language and gender author cohort analysis of e-mail for computer forensics. In \textsl{Proceedings of the Digital
+Forensics Workshop}, 2002.
+
+\bibitem{Fan2008Liblinear}
+R.E. Fan, K.W. Chang, C.J. Hsieh, X.R. Wang and C.J. Lin. LIBLINEAR: a library for large linear classification. In \textsl{Journal of Machine Learning Research}, 9:1871--1874,
+2008.
+
+\bibitem{Goldberg2009Wishes}
+A.B. Goldberg, N. Fillmore, D. Andrzejewski, Z. Xu, B. Gibson and X. Zhu. May all your wishes come true: a study of wishes and how to recognize them. In \textsl{Proceedings of
+the 2009 NAACL-HLT}, pages 263--271, 2009.
+
+\bibitem{Hu2004Mining}
+M. Hu and B. Liu. Mining and summarizing customer reviews. In \textsl{Proceedings of the 10th ACM SIGKDD}, pages 168--177, 2004.
+
+\bibitem{Moghaddam2015Defects}
+S. Moghaddam. Beyond sentiment analysis: mining defects and improvements from customer feedback. In \textsl{Proceedings of the 37th ECIR}, pages 400--410, 2015.
+
+\bibitem{Pang2008Book}
+B. Pang and L. Lee. Opinion mining and sentiment analysis. In \textsl{Foundations and Trends in Information Retrieval}, 2(1-2), pages 1--135, 2008.
+
+\bibitem{Ramanand2010Wishes}
+J. Ramanand, K. Bhavsar, N. Pedanekar. Wishful thinking: finding suggestions and 'buy' wishes from product reviews. In \textsl{Proceedings of the 2010 NAACL-HLT Workshop on
+Computational Approaches to Analysis and Generation of Emotion in Text}, pages 54--61, 2010.
+
+\bibitem{Titov2008TextAspect}
+I. Titov and R.T. McDonald. A joint model of text and aspect ratings for sentiment summarization. In \textsl{Proceedings of the 46th ACL}, pages 308--316, 2008.
+
+\bibitem{Yang2015USTM}
+Z. Yang, A. Kotov, A. Mohan and S. Lu. Parametric and non-parametric user-aware sentiment topic models. In \textsl{Proceedings of the 38th ACM SIGIR}, pages 413--422, 2015.
+
+\bibitem{Yu2011AspectRank}
+J. Yu, Z. J. Zha, M. Wang, T.-S. Chua. Aspect ranking: identifying important product aspects from online consumer reviews. In \textsl{Proceedings of the 49th ACL}, pages
+1496-1505, 2011.
+
+}
+
+\end{thebibliography}
+\end{document}
